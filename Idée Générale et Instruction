@@ -35,4 +35,4 @@
 
 # 3) Elimination des doublons
 
-# On peut chercher un paramètre d qui fait que si deux coefficients sont à distance inférieur ou égale à d le long des segments, alors les droites sont les mêmes.
+# On peut chercher un paramètre d qui fait que si deux coefficients sont à distance inférieur ou égale à d, alors les droites sont les mêmes.
