@@ -21,13 +21,16 @@
 
 # Instructions :
 # - Faire une fonction qui compare le codage rvb de deux pixels
-# - Faire une fonction qui calcule et regarde si le codage rvb des pixels interméndiaires est suffisamment proche (paramètre à déterminer) du codage des pixels de la droite
-# - Fair une fonction utilisant la précédente pour tester la longueur du segment (savoir si le segment traverse toute l'image ou est juste un petit morceau)
+# - Faire une fonction qui calcule et regarde si le codage rvb des pixels intermédiaires est suffisamment proche (paramètre à déterminer) du codage des pixels de la droite
+# - Faire une fonction utilisant la précédente pour tester la longueur du segment (savoir si le segment traverse toute l'image ou est juste un petit morceau)
 # - Faire fonction qui récupère le couple (c, o) étant donné deux points distincts
-# - Faire une fonction qui calcul la transformee de Hough sur un couple
+# - Faire une fonction qui calcul la transformée de Hough sur un couple
 # - Même chose mais sur un couple de vecteurs
 # - Fonction d'affichage de(s) droite(s) sur notre image de base
 
 2) Transformée en coordonnées polaires
+
+# Essentiellement la même mais avec le changement de variable en polaire donné dans l'énoncé et de vérifier si |r| > R , R la longueur de la diagonale de l'image,
+# alors la droite n'est pas sur l'image
 
 
