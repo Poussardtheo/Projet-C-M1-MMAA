@@ -1,0 +1,18 @@
+# Etant donné une image de taille n*m, on sait qu'un segment  existe s'il existe un pixel sur deux colonnes successives dont le codage rvb est le même et
+# que sur le "chemin", les pixels intermédiaires ont le même codage rvb ou très proche.
+
+# On détermine ensuite le coefficient directeur c par la formule c = (Yb - Ya)/(Xb- Xa) où B = (Xb, Yb) et A = (Xa, Ya) sont des pixels de l'image.
+# A partir de là on peut également déterminer l'ordonnée à l'origine o.
+
+# Pour la transformée de Hough, elle prend en paramètre un couple (c, o) (coeff dir, ordon orig) et renvoie une matrice de la taille les dimensions de l'image dont les 
+# coeffcients représentent le nombre de fois où une la droite associée au couple (c, o) passe par ce pixel. Dans le cas présent, on n'aura que des 0 et des 1 dans le
+# étant donné que l'on ne prend qu'un seul couple.
+
+# Si cette fois, on prend un couple de vecteur (C_i, O_i), alors la matrice recensera le nombre de fois où chaque pixel est traversé par une droite avec un maximum de
+# n fois, où n est la longeur de l'un des vecteurs du couple.
+
+# Une remarque étant que l'on peut traiter chaque segment séparément et récupérer leur matrice individuellement, puis faire une matrice finale qui est la somme de toutes
+# les matrices.
+
+# Ensuite, avec cette dernière matrice, on peut tracer les droites de la transformée sur l'image (grâce à la matrice des score des pixels) 
+# pour voir si ça correspond bien.
