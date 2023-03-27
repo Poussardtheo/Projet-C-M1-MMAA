@@ -28,6 +28,11 @@
 # - Même chose mais sur un couple de vecteurs
 # - Fonction d'affichage de(s) droite(s) sur notre image de base
 
+# Remarques
+# S'il y a un segment entre deux points, alors au moins la moitié des pixels intermédiaires auront le même codage que les deux extrémités
+# Bien que long en tant de calcul, il faudrait tester les colonnes deux à deux {(col 0, col 1), (col 0, col 2), ..., (col j, col j+1), ..., (col m-1, m)}
+# pour déterminer toutes les segments qui peuvent exister.
+
 # 2) Transformée en coordonnées polaires
 
 # Essentiellement la même mais avec le changement de variable en polaire donné dans l'énoncé et de vérifier si |r| > R , R la longueur de la diagonale de l'image,
