@@ -1,3 +1,5 @@
+1) Transformée en coordonnées cartésiennes
+
 # Etant donné une image de taille n*m, on sait qu'un segment  existe s'il existe un pixel sur deux colonnes successives dont le codage rvb est le même et
 # que sur le "chemin", les pixels intermédiaires ont le même codage rvb ou très proche.
 
@@ -16,3 +18,16 @@
 
 # Ensuite, avec cette dernière matrice, on peut tracer les droites de la transformée sur l'image (grâce à la matrice des score des pixels) 
 # pour voir si ça correspond bien.
+
+# Instructions :
+# - Faire une fonction qui compare le codage rvb de deux pixels
+# - Faire une fonction qui calcule et regarde si le codage rvb des pixels interméndiaires est suffisamment proche (paramètre à déterminer) du codage des pixels de la droite
+# - Fair une fonction utilisant la précédente pour tester la longueur du segment (savoir si le segment traverse toute l'image ou est juste un petit morceau)
+# - Faire fonction qui récupère le couple (c, o) étant donné deux points distincts
+# - Faire une fonction qui calcul la transformee de Hough sur un couple
+# - Même chose mais sur un couple de vecteurs
+# - Fonction d'affichage de(s) droite(s) sur notre image de base
+
+2) Transformée en coordonnées polaires
+
+
