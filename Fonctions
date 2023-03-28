@@ -1,0 +1,22 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+double coefficient_directeur(std::vector<int> A, std::vector<int> B)
+{
+    double coef_dir;
+    coef_dir = (B[0]-A[0])/(B[1]-A[1]); // Calcul du coefficient directeur
+
+    return coef_dir;
+}
+
+std::vector<int> ordonne_origine(std::vector<std::vector<int>>, double coeff_dir, std::vector<int> A)
+{
+    std::vector<int> ordon_orig;
+    ordon_orig[0] = 0;
+    ordon_orig[1] = A[1]-coeff_dir*A[0];
+
+    return ordon_orig;
+}
+
