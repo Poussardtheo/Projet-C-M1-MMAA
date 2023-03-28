@@ -1,28 +1,27 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <array>
 
 using namespace std;
 
-int main() {
-    // Nom du fichier PPM
-    string filename = "image.ppm";
-    
+// Fonction qui affiche l'image PPM sous forme matricielle
+vector<vector<array<int, 3>>> recupererMatriceImagePPM(const string& filename) {
     // Ouverture du fichier en mode binaire
     ifstream file(filename, ios::binary);
     if (!file) {
         cerr << "Erreur : Impossible d'ouvrir le fichier " << filename << endl;
-        return 1;
+        return {};
     }
     
     // Lecture des informations de l'en-tête
     string magic_number;
     int width, height, max_value;
     file >> magic_number >> width >> height >> max_value;
-    // P6 : binaire, P3 : Ascii 
+    // P6 : binaire, P3 : Ascii
     if (magic_number != "P6" || magic_number != "P3" || max_value != 255) {
         cerr << "Erreur : Format de fichier non supporté" << endl;
-        return 1;
+        return {};
     }
     
     // Lecture des données de l'image
@@ -30,19 +29,66 @@ int main() {
     file.read(reinterpret_cast<char*>(data.data()), data.size());
     if (!file) {
         cerr << "Erreur : Impossible de lire les données de l'image" << endl;
-        return 1;
+        return {};
     }
     
-    // Affichage des données sous forme matricielle
+    // Création de la matrice de pixels
+    vector<vector<array<int, 3>>> matrice_pixels(height, vector<array<int, 3>>(width));
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
             int index = (y * width + x) * 3;
-            cout << static_cast<int>(data[index]) << " ";
-            cout << static_cast<int>(data[index + 1]) << " ";
-            cout << static_cast<int>(data[index + 2]) << " ";
+            matrice_pixels[y][x][0] = static_cast<int>(data[index]);
+            matrice_pixels[y][x][1] = static_cast<int>(data[index + 1]);
+            matrice_pixels[y][x][2] = static_cast<int>(data[index + 2]);
+        }
+    }
+    
+    return matrice_pixels;
+}
+
+int main() {
+    // Nom du fichier PPM
+    string filename = "image.ppm";
+    
+    // Récupération de la matrice des pixels de l'image
+    auto matrice_pixels = recupererMatriceImagePPM(filename);
+    
+    // Affichage de la matrice des pixels
+    for (const auto& ligne : matrice_pixels) {
+        for (const auto& pixel : ligne) {
+            cout << "(" << pixel[0] << ", " << pixel[1] << ", " << pixel[2] << ") ";
         }
         cout << endl;
     }
     
     return 0;
+}
+
+
+bool comparerPixels(const vector<vector<vector<unsigned char>>>& pixels, int x1, int y1, int x2, int y2) {
+    // Vérification des coordonnées
+    int height = pixels.size();
+    int width = pixels[0].size();
+    if (x1 < 0 || x1 >= width || y1 < 0 || y1 >= height || x2 < 0 || x2 >= width || y2 < 0 || y2 >= height) {
+        cerr << "Erreur : Coordonnées de pixel invalides" << endl;
+        return false;
+    }
+    
+    // Comparaison des valeurs RGB
+    for (int c = 0; c < 3; ++c) {
+        if (pixels[y1][x1][c] != pixels[y2][x2][c]) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+int main(){
+    bool resultat = comparerPixels(pixels, 0, 0, 1, 0);
+    if (resultat) {
+        cout << "Les pixels sont identiques" << endl;
+    } else {
+        cout << "Les pixels sont différents" << endl;
+    }
 }
