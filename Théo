@@ -6,7 +6,9 @@
 using namespace std;
 
 // Fonction qui affiche l'image PPM sous forme matricielle
-vector<vector<array<int, 3>>> recupererMatriceImagePPM(const string& filename) {
+
+typedef vector<vector<array<int, 3>>> Matrice
+Matrice recupererMatriceImagePPM(const string& filename) {
     // Ouverture du fichier en mode binaire
     ifstream file(filename, ios::binary);
     if (!file) {
@@ -33,7 +35,7 @@ vector<vector<array<int, 3>>> recupererMatriceImagePPM(const string& filename) {
     }
     
     // Création de la matrice de pixels
-    vector<vector<array<int, 3>>> matrice_pixels(height, vector<array<int, 3>>(width));
+    Matrice matrice_pixels(height, vector<array<int, 3>>(width));
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
             int index = (y * width + x) * 3;
