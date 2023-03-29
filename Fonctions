@@ -7,25 +7,25 @@ using namespace std;
 double coefficient_directeur(std::vector<int> A, std::vector<int> B)
 {
     double coef_dir;
-    coef_dir = (B[0]-A[0])/(B[1]-A[1]); // Calcul du coefficient directeur
+    coef_dir = (B[1]-A[1])/(B[0]-A[0]); // Calcul du coefficient directeur
 
     return coef_dir;
 }
 
 # Fonction 2
 
-std::vector<int> ordonne_origine(std::vector<std::vector<int>>, double coeff_dir, std::vector<int> A)
+std::vector<int> ordonne_origine(double coeff_dir, std::vector<int> A)
 {
-    std::vector<int> ordon_orig;
-    ordon_orig[0] = 0;
-    ordon_orig[1] = A[1]-coeff_dir*A[0];
+    std::vector<int> ordon_orig(2,0);
+    ordon_orig[1] = 0;
+    ordon_orig[0] = A[0]-coeff_dir*A[1];
 
     return ordon_orig;
 }
 
 # Fonction 3
 
-std::vector<std::vector<int>> Tf_Hough_a_couple_donnee(double coef_dir, std::vector<int> ordon_orig, std::vector<int> dim_image, std::vector<std::vector<int>> Matrice_pixel)
+std::vector<std::vector<int>> Tf_Hough_a_couple_donnee(double coef_dir, std::vector<int> ordon_orig, std::vector<int> dim_image)
 {
     std::vector<std::vector<int>> Matrice_Hough;
 
@@ -37,9 +37,9 @@ std::vector<std::vector<int>> Tf_Hough_a_couple_donnee(double coef_dir, std::vec
         }
     }
 
-    if ((ordon_orig[1] >= 0) && (ordon_orig[1] <= dim_image[1]))
+    if ((ordon_orig[1] > -1) && (ordon_orig[1] <= dim_image[1]))
     {
-        std::vector<int> point_A = {(int)floor(coef_dir*i + ordon_orig[1]), i};
+        std::vector<int> point_A = {(int)floor(ordon_orig[1]), 0};
         std::vector<int> point_B = point_A;
 
         for(int i = 1; i < dim_image[1]; i++)
