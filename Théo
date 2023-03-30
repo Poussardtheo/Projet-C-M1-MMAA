@@ -2,13 +2,12 @@
 #include <fstream>
 #include <vector>
 #include <array>
+#include <sstream>
 
 using namespace std;
 
 // Fonction qui affiche l'image PPM sous forme matricielle
-
-typedef vector<vector<array<int, 3>>> Matrice
-Matrice recupererMatriceImagePPM(const string& filename) {
+vector<vector<array<int, 3>>> recupererMatriceImagePPM(const string& filename) {
     // Ouverture du fichier en mode binaire
     ifstream file(filename, ios::binary);
     if (!file) {
@@ -17,54 +16,70 @@ Matrice recupererMatriceImagePPM(const string& filename) {
     }
     
     // Lecture des informations de l'en-tête
+        // Lecture des informations de l'en-tête
+    string line;
     string magic_number;
     int width, height, max_value;
-    file >> magic_number >> width >> height >> max_value;
-    // P6 : binaire, P3 : Ascii
-    if (magic_number != "P6" || magic_number != "P3" || max_value != 255) {
+    bool magic_number_read = false, dimensions_read = false, max_value_read = false;
+    while (getline(file, line)) {
+        // Ignorer les lignes de commentaire qui commencent par #
+        if (line[0] == '#') {
+            continue;
+        }
+        
+        // Extraire les informations de l'en-tête
+        istringstream iss(line);
+        if (!magic_number_read) {
+            if (!(iss >> magic_number)) {
+                cerr << "Erreur : Impossible de lire le nombre magique" << endl;
+                return {};
+            }
+            magic_number_read = true;
+        } else if (!dimensions_read) {
+            if (!(iss >> width >> height)) {
+                cerr << "Erreur : Impossible de lire les dimensions" << endl;
+                return {};
+            }
+            dimensions_read = true;
+        } else if (!max_value_read) {
+            if (!(iss >> max_value)) {
+                cerr << "Erreur : Impossible de lire la valeur maximale" << endl;
+                return {};
+            }
+            max_value_read = true;
+        } else {
+            break; // Fin de l'en-tête
+        }
+    }
+        
+    if (magic_number != "P3" || max_value != 255) {
         cerr << "Erreur : Format de fichier non supporté" << endl;
         return {};
     }
     
     // Lecture des données de l'image
-    vector<unsigned char> data(width * height * 3);
-    file.read(reinterpret_cast<char*>(data.data()), data.size());
-    if (!file) {
-        cerr << "Erreur : Impossible de lire les données de l'image" << endl;
-        return {};
-    }
-    
-    // Création de la matrice de pixels
-    Matrice matrice_pixels(height, vector<array<int, 3>>(width));
-    for (int y = 0; y < height; ++y) {
-        for (int x = 0; x < width; ++x) {
-            int index = (y * width + x) * 3;
-            matrice_pixels[y][x][0] = static_cast<int>(data[index]);
-            matrice_pixels[y][x][1] = static_cast<int>(data[index + 1]);
-            matrice_pixels[y][x][2] = static_cast<int>(data[index + 2]);
+    vector<vector<array<int, 3>>> pixels(height, vector<array<int, 3>>(width));
+
+    // Parcours du reste du fichier pour récupérer les valeurs RGB de chaque pixel
+    int i = 0, j = 0, k = 0;
+    int r, g, b;
+    while (file >> r >> g >> b) {
+        pixels[i][j][0] = r;
+        pixels[i][j][1] = g;
+        pixels[i][j][2] = b;
+
+        // Passage au pixel suivant
+        k++;
+        j++;
+        if (k % width == 0) {
+            i++;
+            j = 0;
         }
     }
-    
-    return matrice_pixels;
+
+    return pixels;
 }
 
-int main() {
-    // Nom du fichier PPM
-    string filename = "image.ppm";
-    
-    // Récupération de la matrice des pixels de l'image
-    auto matrice_pixels = recupererMatriceImagePPM(filename);
-    
-    // Affichage de la matrice des pixels
-    for (const auto& ligne : matrice_pixels) {
-        for (const auto& pixel : ligne) {
-            cout << "(" << pixel[0] << ", " << pixel[1] << ", " << pixel[2] << ") ";
-        }
-        cout << endl;
-    }
-    
-    return 0;
-}
 
 
 bool comparerPixels(const vector<vector<vector<unsigned char>>>& pixels, int x1, int y1, int x2, int y2) {
@@ -87,10 +102,26 @@ bool comparerPixels(const vector<vector<vector<unsigned char>>>& pixels, int x1,
 }
 
 int main(){
-    bool resultat = comparerPixels(pixels, 0, 0, 1, 0);
+    // Nom du fichier PPM
+    string filename = "m1projetcpp2.ppm";
+    
+    // Récupération de la matrice des pixels de l'image
+    auto matrice_pixels = recupererMatriceImagePPM(filename);
+    
+    // Affichage de la matrice des pixels
+    for (const auto& ligne : matrice_pixels) {
+        for (const auto& pixel : ligne) {
+            cout << "(" << pixel[0] << ", " << pixel[1] << ", " << pixel[2] << ") ";
+        }
+        cout << endl;
+    }
+    
+    /*bool resultat = comparerPixels(pixels, 0, 0, 1, 0);
     if (resultat) {
         cout << "Les pixels sont identiques" << endl;
     } else {
         cout << "Les pixels sont différents" << endl;
-    }
+    }*/
+
+    return 0;
 }
