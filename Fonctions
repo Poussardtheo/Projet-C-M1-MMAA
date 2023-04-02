@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
@@ -31,26 +32,32 @@ std::vector<std::vector<int>> Tf_Hough_a_couple_donnee(double coef_dir, std::vec
 
     for (int i = 0; i < dim_image[0]; i++) //Initialisation matrice de Hough
     {
+        std::vector<int> ligne;
         for (int j = 0; j < dim_image[1]; j++)
         {
-            Matrice_Hough[i][j] = 0;
+            ligne.push_back(0);
         }
+        Matrice_Hough.push_back(ligne);
     }
 
-    if ((ordon_orig[1] > -1) && (ordon_orig[1] <= dim_image[1]))
+    for(int i = 0; i < dim_image[0]; i++) // 
     {
-        std::vector<int> point_A = {(int)floor(ordon_orig[1]), 0};
-        std::vector<int> point_B = point_A;
+        double valeur_abscisse = (i-ordon_orig[0])/coef_dir; // On détermine l'abscisse à ordonné fixée
+        int partie_entiere_inf = int(floor(valeur_abscisse)); // On prend la partie entière inférieure
 
-        for(int i = 1; i < dim_image[1]; i++)
+        if (valeur_abscisse < 0 || valeur_abscisse > dim_image[1]) 
         {
-            if (point_B[0] > -1 &&  point_B[0] < dim_image[0] && point_B[1] > -1 && point_B[1] < dim_image[1])
+            continue; // passe à l'itération suivante
+        }else{
+            if (valeur_abscisse > partie_entiere_inf + 0.5) // Nous informe à quel colonne on met un 1 (pixel à gauche ou à droite du segment)
             {
-                point_B[0] = (int)floor(coef_dir*i + ordon_orig[1]);
-                point_B[1] = i;
-                Matrice_Hough[point_B[0]][i] = 1;
+                Matrice_Hough[i][partie_entiere_inf+1] = 1; 
+            }else{
+                Matrice_Hough[i][partie_entiere_inf] = 1;
             }
-        } 
+        }
+
     }
+    
     return Matrice_Hough;
 }
