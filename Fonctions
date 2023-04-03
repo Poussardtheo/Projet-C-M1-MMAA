@@ -61,3 +61,39 @@ std::vector<std::vector<int>> Tf_Hough_a_couple_donnee(double coef_dir, std::vec
     
     return Matrice_Hough;
 }
+
+# Fonction 4
+
+// On regarde combien de droites parmi celle donné en entrée passent par chaque pixel
+std::vector<std::vector<int>> Tf_Hough_finale(std::vector<double> coeff_dir, std::vector<std::vector<int>> ordonn_orig, std::vector<int> dim_image) // La longeur des deux vecteurs doit être la même
+{
+    std::vector<std::vector<int>> Tf_Hough_finale;
+
+    for (int i = 0; i < dim_image[0]; i++) //Initialisation matrice de Hough finale
+    {
+        std::vector<int> ligne;
+        for (int j = 0; j < dim_image[1]; j++)
+        {
+            ligne.push_back(0);
+        }
+        Tf_Hough_finale.push_back(ligne);
+    }
+
+    for(int i = 0; i < coeff_dir.size(); i++)
+    {
+        std::vector<int> tmp; // On crée le i-ème point d'ordonné à l'origine lié au i-ème coefficient directeur.
+        tmp.push_back(ordonn_orig[i][0]);
+        tmp.push_back(ordonn_orig[i][1]);
+        std::vector<std::vector<int>> Mat_a_addition = Tf_Hough_a_couple_donnee(coeff_dir[i], tmp, dim_image);
+
+        for (int j = 0; j < dim_image[0]; j++) // On fait une addition de matrice
+        {
+            for (int k = 0; k < dim_image[1]; k++)
+            {
+            Tf_Hough_finale[j][k] = Tf_Hough_finale[j][k] + Mat_a_addition[j][k];
+            }
+        }
+    }
+
+    return Tf_Hough_finale;
+}
