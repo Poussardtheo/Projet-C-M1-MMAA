@@ -100,9 +100,12 @@ std::vector<std::vector<int>> Tf_Hough_finale(std::vector<double> coeff_dir, std
 
 # Fonction 5
 
-int max_coeff_matrice(std::vector<std::vector<int>> Mat_Hough, std::vector<int> dim_image)
+int Tf_retour(std::vector<std::vector<int>> Mat_Hough, std::vector<int> dim_image)
 {
     int maximum = Mat_Hough[0][0];
+    std::vector<int> coordonnees_max;
+    coordonnees_max.push_back(0);
+    coordonnees_max.push_back(0);
 
     for (int i = 0; i < dim_image[0]; i++)
     {
@@ -111,9 +114,12 @@ int max_coeff_matrice(std::vector<std::vector<int>> Mat_Hough, std::vector<int> 
             if (Mat_Hough[i][j] > maximum)
             {
                 maximum = Mat_Hough[i][j];
+                coordonnees_max[0] = i;
+                coordonnees_max[1] = j;
+
             }
         }
     }
 
-    return maximum;
+    return coordonnees_max;
 }
