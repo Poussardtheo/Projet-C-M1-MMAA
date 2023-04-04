@@ -123,3 +123,41 @@ int Tf_retour(std::vector<std::vector<int>> Mat_Hough, std::vector<int> dim_imag
 
     return coordonnees_max;
 }
+
+# Fonction 6
+
+std::vector<std::vector<int>> rpz_droite_matrice(std::vector<int> coordonnees, std::vector<int> dim_image)
+{
+    std::vector<std::vector<int>> droite_mat;
+    for (int i = 0; i < dim_image[0]; i++) //Initialisation matrice de Hough finale
+    {
+        std::vector<int> ligne;
+
+        for (int j = 0; j < dim_image[1]; j++)
+        {
+            ligne.push_back(0);
+        }
+        droite_mat.push_back(ligne);
+    }
+
+    for(int i = 0; i < dim_image[0]; i++) // 
+    {
+        double valeur_abscisse = (i-coordonnees[1])/coordonnees[0]; // On détermine l'abscisse à ordonné fixée
+        int partie_entiere_inf = int(floor(valeur_abscisse)); // On prend la partie entière inférieure
+
+        if (valeur_abscisse < 0 || valeur_abscisse > dim_image[1]) 
+        {
+            continue; // passe à l'itération suivante
+        }else{
+            if (valeur_abscisse > partie_entiere_inf + 0.5) // Nous informe a quel colonne on met un 1 (pixel à gauche ou à droite du segment)
+            {
+                droite_mat[i][partie_entiere_inf+1] = 1; 
+            }else{
+                droite_mat[i][partie_entiere_inf] = 1;
+            }
+        }
+
+    }
+
+    return droite_mat;
+}
