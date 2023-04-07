@@ -20,7 +20,7 @@
 # pour voir si ça correspond bien.
 
 # Instructions :
-# - Faire une fonction qui compare le codage rvb de deux pixels (Théo) 
+# - Faire une fonction qui compare le codage rvb de deux pixels 
 # - Faire une fonction qui calcule et regarde si le codage rvb des pixels intermédiaires est suffisamment proche (paramètre à déterminer) du codage des pixels de la droite
 # - Faire une fonction utilisant la précédente pour tester la longueur du segment (savoir si le segment traverse toute l'image ou est juste un petit morceau)
 # - Faire fonction qui récupère le couple (c, o) étant donné deux points distincts
