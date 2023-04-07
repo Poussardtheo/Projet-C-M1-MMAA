@@ -161,3 +161,154 @@ std::vector<std::vector<int>> rpz_droite_matrice(std::vector<int> coordonnees, s
 
     return droite_mat;
 }
+
+# Fonction 7
+
+bool compare_pixel(std::vector<int> pix_1, std::vector<int> pix_2)
+{
+    if (pix_1.size() != pix_2.size())   
+    {
+        cerr << "Erreur : Probmèmes de dimensions des pixels" << endl;
+        return false;
+    }
+
+    for(int i = 0; i < pix_1.size(); i++)
+    {
+        if (pix_1[i] != pix_2[i])
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+# Fonction 8
+
+// Renvoi une matrice donnant les pixels de même couleurs
+std::vector<std::vector<int>> matrice_couleur_similaire(std::vector<std::vector<std::vector<int>>> mat_pixel, std::vector<int> dim_image)
+{
+    std::vector<std::vector<int>> m_c_s;
+
+    for (int i = 0; i < dim_image[0]; i++) //Initialisation matrice de Hough
+    {
+        std::vector<int> ligne;
+
+        for (int j = 0; j < dim_image[1]; j++)
+        {
+            ligne.push_back(0);
+        }
+        m_c_s.push_back(ligne);
+    }
+
+    
+    for (int i = 0; i < dim_image[0]; i++)
+    {
+        
+        for(int j = 0; j < dim_image[1]; j++)
+        {
+            if (compare_pixel(mat_pixel[0][0], mat_pixel[i][j]) == true)
+            {
+                m_c_s[i][j] =  1;
+            }
+        }
+    }
+
+    return m_c_s;
+}
+
+# Main 
+
+int main() {
+
+    std::vector<std::vector<std::vector<int>>> Image;
+    int noir = 0;
+    int blanc = 255;
+
+    for (int i = 0; i < 3; i++)
+    {
+        std::vector<std::vector<int>> ligne;
+        for (int j = 0; j < 3; j++)
+        {
+            std::vector<int> pix;
+            if (((i+j)%2) == 0)
+            {
+                for(int k = 0; k < 3; k++)
+                {
+                    pix.push_back(blanc);
+                }
+            }else{
+                for(int k = 0; k < 3; k++)
+                {
+                    pix.push_back(noir);
+                }            
+            }
+            ligne.push_back(pix);
+        }
+        Image.push_back(ligne);
+    }
+
+   /* for (int i = 0; i < 3; i++)
+    {
+        for(int j = 0; j < 3; j++)
+        {
+            for(int k = 0; k < 3; k++)
+            {
+                std::cout << Image[i][j][k] << " ";
+            }
+            std::cout << ", ";
+        }
+        std::cout << endl;
+    }*/
+
+    std::vector<int> dim = {3,3};
+    std::vector<std::vector<int>> M = matrice_couleur_similaire(Image, dim);
+/*
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            std::cout << M[i][j] << " ";
+        }
+        std::cout << std::endl;
+
+    }
+*/
+
+
+    std::vector<int> A = {3, 0};
+    std::vector<int> B = {0, 3};
+    std::vector<int> C = {2,1};
+    std::vector<int> D = {3,2};
+
+    double m1 = coefficient_directeur(A,B);
+    std::vector<int> o1 = ordonne_origine(m1, A);
+    double m2 = coefficient_directeur(C,D);
+    std::vector<int> o2 = ordonne_origine(m2, C);
+
+    std::vector<double> m = {m1, m2};
+    std::vector<std::vector<int>> o;
+    o.push_back(o1);
+    o.push_back(o2);
+
+
+   //  std::cout << m << ", (" << o[0] << ", " << o[1] << ")" << std::endl;
+
+
+    std::vector<int> dim_image(5,5);
+    std::vector<std::vector<int>> Tf_Hough = Tf_Hough_finale(m, o, dim_image);
+    std::vector<int> retour = Tf_retour(Tf_Hough, dim_image);
+    std::vector<std::vector<int>> rpz = rpz_droite_matrice(retour, dim_image);
+    
+    for(int i = 0; i < dim_image[0]; i++)
+    {
+        for(int j = 0; j < dim_image[1]; j++)
+        {
+            std::cout << rpz[i][j] << " ";
+        }
+
+        std::cout << std::endl;
+    }
+    
+    return 0;
+}
